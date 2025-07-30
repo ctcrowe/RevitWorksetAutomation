@@ -11,8 +11,14 @@ namespace Worksets
     {
       if(x > a.Maxima[2] || y > a.Maxima[3] || x < a.Maxima[0] || y < a.Maxima[1]) return false;
       int crosses = 0;
-      Parallel.ForEach(a.edges, c => if( ((c[1] > y) != (c[3] > y)) && (x < (c[2] - c[0]) * (y - c[1]) / (c[3] - c[1]) + c[0]) ) crosses++ );
+      foreach(var c in a.edges) { if(testCrosses(x, y, c)) crosses++; }
       return (crosses % 2) == 1;
+    }
+    private static bool testCrosses(double x, double y, double[] c)
+    {
+      if((c[1] > y) == (c[3] > y)) return false;
+      if(x < (c[2] - c[0]) * (y - c[1]) / (c[3] - c[1]) + c[0]) return true;
+      return false;
     }
     public static AreaData getAreaData(this Document doc, Element ele, AreaSet aSet)
     {
